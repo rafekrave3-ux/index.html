@@ -10,95 +10,70 @@
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap');
         body { font-family: 'Cairo', sans-serif; }
         
-        /* تأثير الزجاج (Glassmorphism) الاحترافي */
         .glass-panel {
-            background: rgba(15, 15, 15, 0.85);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(250, 204, 21, 0.15); /* إطار ذهبي خفيف */
+            background: rgba(15, 15, 15, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(250, 204, 21, 0.2);
         }
 
-        /* تأثير الظهور السلس */
-        .fade-in {
-            animation: fadeIn 0.4s ease-in-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .fade-in { animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body class="bg-black min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden text-white">
+<body class="bg-black min-h-screen flex flex-col items-center justify-center p-4 text-white">
 
-    <div class="absolute top-0 left-0 w-96 h-96 bg-yellow-600 rounded-full mix-blend-screen filter blur-[120px] opacity-20 pointer-events-none"></div>
-    <div class="absolute bottom-0 right-0 w-96 h-96 bg-yellow-900 rounded-full mix-blend-screen filter blur-[120px] opacity-20 pointer-events-none"></div>
+    <div class="absolute top-0 left-0 w-80 h-80 bg-yellow-600/10 rounded-full blur-[100px] pointer-events-none"></div>
 
-    <div class="glass-panel p-8 md:p-10 rounded-[2rem] w-full max-w-lg z-10 shadow-2xl shadow-yellow-500/10">
+    <div class="glass-panel p-8 md:p-10 rounded-[2.5rem] w-full max-w-lg z-10 shadow-2xl shadow-yellow-500/5">
         
         <div class="text-center mb-8">
-            <div class="inline-block p-4 rounded-full bg-zinc-900/80 border border-yellow-500/30 mb-4 shadow-lg shadow-yellow-500/20">
+            <div class="inline-block p-4 rounded-3xl bg-zinc-900 border border-yellow-500/30 mb-4">
                 <i class="fab fa-youtube text-4xl text-yellow-500"></i>
             </div>
-            <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 to-yellow-600 mb-2">
+            <h1 class="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-yellow-200 to-yellow-600 mb-2">
                 بوينت للتحميل الذكي
             </h1>
-            <p class="text-zinc-400 text-sm">أداة احترافية لتحويل مقاطع يوتيوب إلى MP3 بضغطة زر</p>
+            <p class="text-zinc-500 text-sm">أداة احترافية وآمنة لتحويل المقاطع</p>
         </div>
 
         <form id="downloadForm" class="space-y-4">
-            <div class="relative">
-                <input type="url" id="ytUrl" required placeholder="https://www.youtube.com/watch?v=..."
-                    class="w-full bg-zinc-900/80 border border-zinc-700 rounded-2xl py-4 px-4 pl-12 text-white placeholder-zinc-500 focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-all text-left"
-                    dir="ltr">
-                <i class="fas fa-link absolute left-4 top-1/2 transform -translate-y-1/2 text-zinc-500"></i>
-            </div>
-            
-            <div id="errorMsg" class="hidden text-red-400 text-sm font-semibold px-2">
-                <i class="fas fa-exclamation-circle mr-1"></i> عذراً، تأكد من إدخال رابط يوتيوب صحيح.
-            </div>
+            <input type="url" id="ytUrl" required placeholder="ضع رابط الفيديو هنا..."
+                class="w-full bg-zinc-900 border border-zinc-800 rounded-2xl py-4 px-5 text-white focus:border-yellow-500 transition-all text-left" dir="ltr">
 
-            <button type="submit" id="submitBtn" class="w-full bg-gradient-to-r from-yellow-500 to-yellow-700 hover:from-yellow-400 hover:to-yellow-600 text-black font-bold py-4 rounded-2xl transition-all shadow-lg shadow-yellow-600/25 flex justify-center items-center gap-2 transform hover:scale-[1.02] active:scale-[0.98]">
-                <span id="btnText">بدء التحويل <i class="fas fa-bolt mr-1"></i></span>
+            <button type="submit" id="submitBtn" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-extrabold py-4 rounded-2xl transition-all flex justify-center items-center gap-2">
+                <span id="btnText">تحويل الفيديو <i class="fas fa-magic mr-1"></i></span>
                 <i id="loadingIcon" class="fas fa-circle-notch fa-spin hidden text-xl"></i>
             </button>
         </form>
 
         <div id="resultBox" class="hidden mt-8 pt-8 border-t border-zinc-800 fade-in">
-            <img id="thumb" class="w-full h-52 object-cover rounded-2xl mb-5 shadow-lg border border-zinc-700" src="" alt="Thumbnail">
+            <img id="thumb" class="w-full h-48 object-cover rounded-2xl mb-5 border border-zinc-800" src="" alt="Thumbnail">
             
-            <div class="flex items-center justify-center gap-2 mb-5">
-                <span class="bg-green-500/10 text-green-400 px-3 py-1 rounded-full text-xs font-bold border border-green-500/20">
-                    <i class="fas fa-check-circle mr-1"></i> جاهز للتحميل
-                </span>
-                <span class="bg-yellow-500/10 text-yellow-500 px-3 py-1 rounded-full text-xs font-bold border border-yellow-500/20">
-                    MP3
-                </span>
+            <div class="grid grid-cols-1 gap-3">
+                <a id="dlLinkMain" href="#" target="_blank" class="flex items-center justify-center gap-2 w-full bg-zinc-100 text-black font-bold py-4 rounded-2xl hover:bg-white transition-all">
+                    <i class="fas fa-download text-lg"></i> تحميل MP3 (سيرفر 1)
+                </a>
+                
+                <a id="dlLinkAlt" href="#" target="_blank" class="flex items-center justify-center gap-2 w-full bg-zinc-900 border border-zinc-800 text-zinc-400 font-bold py-3 rounded-2xl hover:border-yellow-500/50 transition-all text-sm">
+                    <i class="fas fa-link"></i> سيرفر احتياطي (إذا لم يعمل الأول)
+                </a>
             </div>
-
-            <a id="dlLink" href="#" target="_blank" class="flex items-center justify-center gap-2 w-full bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 hover:border-yellow-500 text-white font-bold py-4 rounded-2xl transition-all shadow-lg">
-                <i class="fas fa-cloud-download-alt text-xl text-yellow-500"></i> تحميل الملف الصوتي
-            </a>
+            <p class="text-center text-[10px] text-zinc-600 mt-4">قد تفتح صفحة التحميل في نافذة جديدة، انتظر ثواني ليبدأ التجهيز.</p>
         </div>
     </div>
 
-    <div class="mt-8 text-zinc-500 text-sm z-10 font-semibold tracking-wide">
-        تم التطوير بواسطة بوينت للدعاية والإعلان &copy; 2026
+    <div class="mt-8 text-zinc-700 text-xs font-bold uppercase tracking-widest">
+        Point Advertising &copy; 2026
     </div>
 
     <script>
         document.getElementById('downloadForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
             const url = document.getElementById('ytUrl').value.trim();
             const btnText = document.getElementById('btnText');
             const loadingIcon = document.getElementById('loadingIcon');
             const resultBox = document.getElementById('resultBox');
             const submitBtn = document.getElementById('submitBtn');
-            const errorMsg = document.getElementById('errorMsg');
-
-            // إخفاء رسالة الخطأ والنتائج عند بدء طلب جديد
-            errorMsg.classList.add('hidden');
-            resultBox.classList.add('hidden');
 
             const extractVideoID = (url) => {
                 const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
@@ -107,38 +82,24 @@
             };
 
             const videoId = extractVideoID(url);
-
-            if (!videoId) {
-                // إظهار رسالة الخطأ بشكل أنيق بدلاً من alert
-                errorMsg.classList.remove('hidden');
-                document.getElementById('ytUrl').classList.add('border-red-500');
-                return;
-            }
-            
-            document.getElementById('ytUrl').classList.remove('border-red-500');
+            if (!videoId) { return alert('يرجى إدخال رابط يوتيوب صحيح'); }
 
             btnText.classList.add('hidden');
             loadingIcon.classList.remove('hidden');
             submitBtn.disabled = true;
-            submitBtn.classList.add('opacity-70', 'cursor-not-allowed');
 
             setTimeout(() => {
-                document.getElementById('thumb').src = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+                document.getElementById('thumb').src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
                 
-                // إضافة معالج خطأ للصورة المصغرة في حال لم تتوفر جودة عالية
-                document.getElementById('thumb').onerror = function() {
-                    this.src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-                };
-                
-                document.getElementById('dlLink').href = `https://api.vevioz.com/api/button/mp3/${videoId}`;
+                // تحديث الروابط لمزودين جدد مستقرين
+                document.getElementById('dlLinkMain').href = `https://www.yt2mp3s.me/@api/button/mp3/${videoId}`;
+                document.getElementById('dlLinkAlt').href = `https://youtube-mp360.com/api/button/mp3/${videoId}`;
                 
                 btnText.classList.remove('hidden');
                 loadingIcon.classList.add('hidden');
                 submitBtn.disabled = false;
-                submitBtn.classList.remove('opacity-70', 'cursor-not-allowed');
-                
                 resultBox.classList.remove('hidden');
-            }, 1200);
+            }, 1000);
         });
     </script>
 </body>
